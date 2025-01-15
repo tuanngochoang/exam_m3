@@ -13,16 +13,7 @@
     <div class="" style="max-width: 400px; width: 100%;">
         <h1 class="card-title text-center mb-4 mt-5">Them mat bang</h1>
 
-        <div class="mt-3">
-            <c:if test="${not empty successMessage}">
-                <div class="alert alert-success">${successMessage}</div>
-            </c:if>
-            <c:if test="${not empty errorMessage}">
-                <div class="alert alert-danger">${errorMessage}</div>
-            </c:if>
-        </div>
-
-        <form action="/apartments/add" method="post">
+        <form action="/apartments/add" method="post" onsubmit="return validateForm() ;">
             <div class="mb-3 mt-5">
                 <label for="id" class="form-label">Ma mat bang</label>
                 <input type="text" id="id" name="id" class="form-control" placeholder="Vi du: MB000" required>
@@ -105,9 +96,53 @@
                 </div>
             </div>
         </form>
+        <div class="mt-3">
+            <c:if test="${not empty successMessage}">
+                <div class="alert alert-success">${successMessage}</div>
+            </c:if>
+            <c:if test="${not empty errorMessage}">
+                <div class="alert alert-danger">${errorMessage}</div>
+            </c:if>
+        </div>
     </div>
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    function validateForm() {
+
+        var area = document.getElementById('area').value;
+        var price = document.getElementById('price').value;
+        var startDay = document.getElementById('startDay').value;
+        var endDay = document.getElementById('endDay').value;
+
+        var areaRegex = /^[0-9]+(\.[0-9]+)?$/;
+        var priceRegex = /^[0-9]+(\.[0-9]+)?$/;
+        var dateRegex = /^([0-2][0-9]|(3)[0-1])\/(0[1-9]|1[0-2])\/([0-9]{4})$/;
+
+        if (!area.match(areaRegex)) {
+            alert("Dien tich khong hop le.");
+            return false;
+        }
+
+        if (!price.match(priceRegex)) {
+            alert("Gia cho thue khong hop le.");
+            return false;
+        }
+
+        if (!startDay.match(dateRegex)) {
+            alert("Ngay bat dau phai co dinh dang DD/MM/YYYY.");
+            return false;
+        }
+
+        if (!endDay.match(dateRegex)) {
+            alert("Ngay ket thuc phai co dinh dang DD/MM/YYYY.");
+            return false;
+        }
+
+        return true;
+    }
+</script>
+
 </body>
 </html>

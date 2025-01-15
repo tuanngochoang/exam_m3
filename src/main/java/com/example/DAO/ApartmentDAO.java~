@@ -13,12 +13,20 @@ import java.util.Date;
 import java.util.List;
 
 public class ApartmentDAO {
-    Apartment apartment;
     private List<Apartment> apartments;
 
     public List<Apartment> findApartments() {
         apartments = new ArrayList<>();
         try {
+            SimpleDateFormat inputFormat = new SimpleDateFormat("dd/MM/yyyy");
+            SimpleDateFormat outputFormat = new SimpleDateFormat("yyyy-MM-dd");
+
+            Apartment apartment = null;
+            Date startDate = inputFormat.parse(apartment.getStartDay());
+            Date endDate = inputFormat.parse(apartment.getEndDay());
+
+            String formattedStartDay = outputFormat.format(startDate);
+            String formattedEndDay = outputFormat.format(endDate);
             Connection connection = JdbcConnection.getConnection();
             String query = "SELECT * FROM mat_bang_cho_thue LIMIT 10";
             assert connection != null;
@@ -33,8 +41,8 @@ public class ApartmentDAO {
                 apartment.setType(resultSet.getString("type"));
                 apartment.setDescription(resultSet.getString("description"));
                 apartment.setPrice(resultSet.getInt("price"));
-                apartment.setStartDay(resultSet.getString("start_day"));
-                apartment.setEndDay(resultSet.getString("end_day"));
+                apartment.setStartDay(resultSet.getString(formattedStartDay));
+                apartment.setEndDay(resultSet.getString(formattedEndDay));
                 apartments.add(apartment);
             }
             connection.close();
@@ -61,14 +69,6 @@ public class ApartmentDAO {
 
     public void addApartment(Apartment apartment) {
         try {
-            SimpleDateFormat inputFormat = new SimpleDateFormat("dd/MM/yyyy");
-            SimpleDateFormat outputFormat = new SimpleDateFormat("yyyy-MM-dd");
-
-            Date startDate = inputFormat.parse(apartment.getStartDay());
-            Date endDate = inputFormat.parse(apartment.getEndDay());
-
-            String formattedStartDay = outputFormat.format(startDate);
-            String formattedEndDay = outputFormat.format(endDate);
             Connection connection = JdbcConnection.getConnection();
             String query = "INSERT INTO mat_bang_cho_thue (id, area, status, floor, type, description, price, start_day, end_day) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
             assert connection != null;
@@ -80,8 +80,8 @@ public class ApartmentDAO {
             preparedStatement.setString(5, apartment.getType());
             preparedStatement.setString(6, apartment.getDescription());
             preparedStatement.setInt(7, apartment.getPrice());
-            preparedStatement.setString(8, formattedStartDay);
-            preparedStatement.setString(9, formattedEndDay);
+            preparedStatement.setString(8, apartment.getStartDay());
+            preparedStatement.setString(9, apartment.getEndDay());
             preparedStatement.executeUpdate();
             connection.close();
         } catch (Exception e) {

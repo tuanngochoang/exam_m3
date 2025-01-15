@@ -55,14 +55,9 @@ public class ApartmentController extends HttpServlet {
 
                 Apartment newApartment = new Apartment(id, area, status, floor, type, description, price, startDay, endDay);
 
-                try {
-                    apartmentService.insertApartment(newApartment);
-                    req.setAttribute("successMessage", "Thêm căn hộ thành công.");
-                    req.getRequestDispatcher("/WEB-INF/view/apartment/add.jsp").forward(req, resp);
-                } catch (Exception e) {
-                    req.setAttribute("errorMessage", "Có lỗi xảy ra khi thêm căn hộ.");
-                    req.getRequestDispatcher("/WEB-INF/view/apartment/add.jsp").forward(req, resp);
-                }
+                apartmentService.insertApartment(newApartment);
+                req.setAttribute("successMessage", "Added apartments success");
+                req.getRequestDispatcher("/WEB-INF/view/apartment/add.jsp").forward(req, resp);
                 break;
         }
     }

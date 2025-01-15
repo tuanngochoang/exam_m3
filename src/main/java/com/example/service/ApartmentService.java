@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Optional;
 
 public class ApartmentService {
     private final ApartmentDAO apartmentDAO;
@@ -16,8 +17,11 @@ public class ApartmentService {
     }
 
     public void insertApartment(Apartment apartment) {
-        if (apartment == null || apartment.getId() == null || apartment.getId().isEmpty()) {
-            throw new IllegalArgumentException("Apartment or ID cannot be null/empty.");
+        if (!Optional.ofNullable(apartment).isPresent()) {
+            throw new IllegalArgumentException("Apartment cannot be null.");
+        }
+        if (apartmentDAO.findIdById(apartment.getId())) {
+            throw new IllegalArgumentException("Apartment ID already exists.");
         }
         apartmentDAO.addApartment(apartment);
     }

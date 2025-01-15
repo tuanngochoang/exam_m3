@@ -8,6 +8,6 @@
 <h1><%= "Hello World!" %></h1>
 <br/>
 <a href="/apartments/add">Add apartment</a>
-<a href="/apartments/list">List Apartmant</a>
+<a href="/apartments/list">Add apartment</a>
 </body>
 </html>
